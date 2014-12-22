@@ -35,65 +35,87 @@ webglue.MODELVIEW = 0x1700;
 webglue.PROJECTION = 0x1701;
 webglue.TEXTURE = 0x1702;
 
+webglue.POINTS = 0x0000;
+webglue.LINES = 0x0001;
+webglue.LINE_LOOP = 0x0002;
+webglue.LINE_STRIP = 0x0003;
+webglue.TRIANGLES = 0x0004;
+webglue.TRIANGLE_STRIP = 0x0005;
+webglue.TRIANGLE_FAN =  0x0006;
+webglue.QUADS = 0x0007;
+
 webglue.IDENTITY_MATRIX = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 
 
 webglue.multiplyMM = function(ab, a, b) {
-    var abOfs = 0;
-    var aOfs = 0;
-    var bOfs = 0;
+  var abOfs = 0;
+  var aOfs = 0;
+  var bOfs = 0;
 
-    var a0 = a[aOfs + 0], a1 = a[aOfs + 1], a2 = a[aOfs + 2], a3 = a[aOfs + 3];
-    var a4 = a[aOfs + 4], a5 = a[aOfs + 5], a6 = a[aOfs + 6], a7 = a[aOfs + 7];
-    var a8 = a[aOfs + 8], a9 = a[aOfs + 9], a10 = a[aOfs + 10], a11 = a[aOfs + 11];
-    var a12 = a[aOfs + 12], a13 = a[aOfs + 13], a14 = a[aOfs + 14], a15 = a[aOfs + 15];
+  var a0 = a[aOfs + 0], a1 = a[aOfs + 1], a2 = a[aOfs + 2], a3 = a[aOfs + 3];
+  var a4 = a[aOfs + 4], a5 = a[aOfs + 5], a6 = a[aOfs + 6], a7 = a[aOfs + 7];
+  var a8 = a[aOfs + 8], a9 = a[aOfs + 9], a10 = a[aOfs + 10], a11 = a[aOfs + 11];
+  var a12 = a[aOfs + 12], a13 = a[aOfs + 13], a14 = a[aOfs + 14], a15 = a[aOfs + 15];
 
-    var b0 = b[bOfs + 0];
-    var b1 = b[bOfs + 1];
-    var b2 = b[bOfs + 2];
-    var b3 = b[bOfs + 3];
-    ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
-    ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
-    ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14) ;
-    ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15) ;
+  var b0 = b[bOfs + 0];
+  var b1 = b[bOfs + 1];
+  var b2 = b[bOfs + 2];
+  var b3 = b[bOfs + 3];
+  ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
+  ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
+  ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14) ;
+  ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15) ;
     
-    abOfs += 4;
-    bOfs += 4;
-    b0 = b[bOfs + 0];
-    b1 = b[bOfs + 1];
-    b2 = b[bOfs + 2];
-    b3 = b[bOfs + 3];
-    ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
-    ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
-    ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14) ;
-    ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15) ;
+  abOfs += 4;
+  bOfs += 4;
+  b0 = b[bOfs + 0];
+  b1 = b[bOfs + 1];
+  b2 = b[bOfs + 2];
+  b3 = b[bOfs + 3];
+  ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
+  ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
+  ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14) ;
+  ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15) ;
 
-    abOfs += 4;
-    bOfs += 4;
-    b0 = b[bOfs + 0];
-    b1 = b[bOfs + 1];
-    b2 = b[bOfs + 2];
-    b3 = b[bOfs + 3];
-    ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
-    ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
-    ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14);
-    ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15);
+  abOfs += 4;
+  bOfs += 4;
+  b0 = b[bOfs + 0];
+  b1 = b[bOfs + 1];
+  b2 = b[bOfs + 2];
+  b3 = b[bOfs + 3];
+  ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
+  ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
+  ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14);
+  ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15);
     
-    abOfs += 4;
-    bOfs += 4;
-    b0 = b[bOfs + 0];
-    b1 = b[bOfs + 1];
-    b2 = b[bOfs + 2];
-    b3 = b[bOfs + 3];
-    ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
-    ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
-    ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14) ;
-    ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15) ;
+  abOfs += 4;
+  bOfs += 4;
+  b0 = b[bOfs + 0];
+  b1 = b[bOfs + 1];
+  b2 = b[bOfs + 2];
+  b3 = b[bOfs + 3];
+  ab[abOfs + 0] = (b0 * a0) + (b1 * a4) + (b2 * a8) + (b3 * a12);
+  ab[abOfs + 1] = (b0 * a1) + (b1 * a5) + (b2 * a9) + (b3 * a13);
+  ab[abOfs + 2] = (b0 * a2) + (b1 * a6) + (b2 * a10) + (b3 * a14) ;
+  ab[abOfs + 3] = (b0 * a3) + (b1 * a7) + (b2 * a11) + (b3 * a15) ;
+};
+
+/**
+ * Translates matrix m by sx, sy, and sz in place.
+ * @param {Array<number>} m matrix
+ * @param {number} x translation factor x
+ * @param {number} y translation factor y
+ * @param {number} z translation factor z
+ */
+webglue.translateM = function(m, x, y, z) {
+  for (var i = 0 ; i < 4; i++) {
+    m[12 + i] += m[i] * x + m[4 + i] * y + m[8 + i] * z;
+  }
 };
 
 webglue.last = function(arr) {
-    return arr[arr.length - 1];
-}
+  return arr[arr.length - 1];
+};
 
 /**
  * The context manages the modelview, projection and texture matrix
@@ -135,77 +157,76 @@ webglue.Context = function (gl) {
   this.tmpMatrix_ = new Array(16);
 };
 
-
 webglue.Context.prototype.loadIdentity = function() {
-    this.currentMatrixStack_[this.currentMatrixStack_.length - 1] = 
-        this.currentMatrix_ = webglue.IDENTITY_MATRIX.slice();
+  this.currentMatrixStack_[this.currentMatrixStack_.length - 1] = 
+      this.currentMatrix_ = webglue.IDENTITY_MATRIX.slice();
 };
 
 webglue.Context.prototype.matrixMode = function(mm) {
-    switch (mm) {
-    case webglue.MODELVIEW:
-      this.currentMatrixStack_ = this.modelViewMatrixStack_;
-      this.currentMatrixFlag_ = 1;
-      break;
-    case webglue.PROJECTION:
-      this.currentMatrixStack_ = this.projectionMatrixStack_;
-      this.currentMatrixFlag_ = 2;
-      break;
-    case webglue.TEXTURE:
-      if (this.activeTexture_ === 0) {
-        this.currentMatrixStack_ = this.texture0MatrixStack_;
-        this.currentMatrixFlag = 4;
-      } else {
-        this.currentMatrixStack_ = this.texture1MatrixStack_;
-        this.currentMatrixFlag_ = 8;
-      }
-      break;
-    default:
-      throw "Unrecoginzed matrix mode: " + mm;
+  switch (mm) {
+  case webglue.MODELVIEW:
+    this.currentMatrixStack_ = this.modelViewMatrixStack_;
+    this.currentMatrixFlag_ = 1;
+    break;
+  case webglue.PROJECTION:
+    this.currentMatrixStack_ = this.projectionMatrixStack_;
+    this.currentMatrixFlag_ = 2;
+    break;
+  case webglue.TEXTURE:
+    if (this.activeTexture_ === 0) {
+      this.currentMatrixStack_ = this.texture0MatrixStack_;
+      this.currentMatrixFlag = 4;
+    } else {
+      this.currentMatrixStack_ = this.texture1MatrixStack_;
+      this.currentMatrixFlag_ = 8;
     }
-    this.matrixMode_ = mm;
-    this.currentMatrix_ = this.currentMatrixStack_[this.currentMatrixStack_.length - 1];
+    break;
+  default:
+    throw "Unrecoginzed matrix mode: " + mm;
+  }
+  this.matrixMode_ = mm;
+  this.currentMatrix_ = this.currentMatrixStack_[this.currentMatrixStack_.length - 1];
 };
 
 webglue.Context.prototype.multMatrix = function(matrix) {
-    webglue.multiplyMM(this.tmpMatrix_, this.currentMatrix_, matrix);
-    var tmp = this.currentMatrix_;
-    this.currentMatrixStack_[this.currentMatrixStack_.length - 1] = this.currentMatrix_ = this.tmpMatrix_;
-    this.tmpMatrix_ = tmp;
-    this.matrixDirty |= this.currentMatrixFlag_;
+  webglue.multiplyMM(this.tmpMatrix_, this.currentMatrix_, matrix);
+  var tmp = this.currentMatrix_;
+  this.currentMatrixStack_[this.currentMatrixStack_.length - 1] = this.currentMatrix_ = this.tmpMatrix_;
+  this.tmpMatrix_ = tmp;
+  this.matrixDirty |= this.currentMatrixFlag_;
 };
 
 webglue.Context.prototype.frustum = function(left, right, bottom, top, zNear, zFar) {
-    var matrix = [
-        2 * zNear / (right - left), 0, 0, 0,
-        0, 2 * zNear / (top - bottom), 0, 0,
-        0, 0, -(zFar + zNear) / (zFar - zNear), -1,
-        0, 0, -2 * zFar * zNear / (zFar - zNear), 0
-      ];
-    this.multMatrix(matrix);
+  var matrix = [
+      2 * zNear / (right - left), 0, 0, 0,
+      0, 2 * zNear / (top - bottom), 0, 0,
+      0, 0, -(zFar + zNear) / (zFar - zNear), -1,
+      0, 0, -2 * zFar * zNear / (zFar - zNear), 0
+  ];
+  this.multMatrix(matrix);
 };
 
 webglue.Context.prototype.perspective = function(fovy, aspect, zNear, zFar) {
-    var top = zNear * Math.tan(fovy * (Math.PI / 360.0));
-    var bottom = -top;
-    var left = bottom * aspect;
-    var right = top * aspect;
-    this.frustum(left, right, bottom, top, zNear, zFar);
+  var top = zNear * Math.tan(fovy * (Math.PI / 360.0));
+  var bottom = -top;
+  var left = bottom * aspect;
+  var right = top * aspect;
+  this.frustum(left, right, bottom, top, zNear, zFar);
 };
          
          
 webglue.Context.prototype.prepare = function() {
-    if ((this.matrixDirty_ & 3) !== 0) {
-        webglue.multiplyMM(this.mvpMatrix_, webglue.last(this.projectionMatrixStack_), 
-            webglue.last(this.modelViewMatrixStack_));
-        this.gl.uniformMatrix4fv(this.mvpLocation, false, this.mvpMatrix_);
+  if ((this.matrixDirty_ & 3) !== 0) {
+    webglue.multiplyMM(this.mvpMatrix_, webglue.last(this.projectionMatrixStack_), 
+        webglue.last(this.modelViewMatrixStack_));
+    this.gl.uniformMatrix4fv(this.mvpLocation, false, this.mvpMatrix_);
         
-        if ((this.matrixDirty_ & 1) !== 0) {
-            this.gl.uniformMatrix4fv(this.modelViewLocation, false, webglue.last(this.modelViewMatrixStack_));
-        }
+    if ((this.matrixDirty_ & 1) !== 0) {
+      this.gl.uniformMatrix4fv(this.modelViewLocation, false, webglue.last(this.modelViewMatrixStack_));
     }
+  }
     
-   //this.gl.uniformMatrix4fv(this.mvpLocation, false, [1,0,0,0,  0,1,0,0, 0,0,1,0, 0,0,0,1]);
+  //this.gl.uniformMatrix4fv(this.mvpLocation, false, [1,0,0,0,  0,1,0,0, 0,0,1,0, 0,0,0,1]);
   // this.gl.uniformMatrix4fv(this.modelViewLocation, false, [1,0,0,0,  0,1,0,0, 0,0,1,0, 0,0,0,1]);
 
     /*
@@ -223,7 +244,7 @@ webglue.Context.prototype.prepare = function() {
     }
     */
     
-    this.matrixDirty = 0;
+  this.matrixDirty = 0;
 
 
 //    int enableTex0 = texture0Enabled /*&& (arraysEnabled & (1 << ARRAY_TEXCOORD_0)) != 0*/ ? 1 : 0;
@@ -237,39 +258,46 @@ webglue.Context.prototype.prepare = function() {
     }
   }
   */
-}
+};
+
+
+webglue.Context.prototype.translatef = function(x, y, z) {
+  webglue.translateM(this.currentMatrix_, x, y, z);
+  this.matrixDirty_ |= this.currentMatrixFlag;
+};
+
           
 /**
  * @constructor
  */
 webglue.MeshBuilder = function (context, options, maxEdges) {
-    var gl = context.gl;
-    this.context = context;
-    this.glBuffer = gl.createBuffer();
+  var gl = context.gl;
+  this.context = context;
+  this.glBuffer = gl.createBuffer();
     
-    this.maxEdges = maxEdges;
-    var byteBuffer = new ArrayBuffer(maxEdges * 2 * 3);
-    this.indexBuffer = new Uint16Array(byteBuffer);
+  this.maxEdges = maxEdges;
+  var byteBuffer = new ArrayBuffer(maxEdges * 2 * 3);
+  this.indexBuffer = new Uint16Array(byteBuffer);
     
-    byteBuffer = new ArrayBuffer(maxEdges * webglue.MeshBuilder.BYTE_STRIDE);
-    this.floatBuffer = new Float32Array(byteBuffer);
-    this.intBuffer = new Uint32Array(byteBuffer);
-    this.mode = webglue.MeshBuilder.Mode.TRIANGLES;
+  byteBuffer = new ArrayBuffer(maxEdges * webglue.MeshBuilder.BYTE_STRIDE);
+  this.floatBuffer = new Float32Array(byteBuffer);
+  this.intBuffer = new Uint32Array(byteBuffer);
+  this.mode = webglue.MeshBuilder.Mode.TRIANGLES;
     
-    this.color = 0;
-    this.texCoordS = this.texCoordT = 0;
-    this.normalX = this.normalY = this.normalZ = 0;
-    this.hasColor = this.hasNormal = this.hasTexCoords = false;
+  this.color = 0;
+  this.texCoordS = this.texCoordT = 0;
+  this.normalX = this.normalY = this.normalZ = 0;
+  this.hasColor = this.hasNormal = this.hasTexCoords = false;
     
-    this.floatBufferPos = 0;
-    this.modeStartEdge = 0;
-    this.edgeCount = this.indexCount = 0;
-    this.tx = this.ty = this.tz = 0;
+  this.floatBufferPos = 0;
+  this.modeStartEdge = 0;
+  this.edgeCount = this.indexCount = 0;
+  this.tx = this.ty = this.tz = 0;
     
-    this.options = options;
-    this.hasColor = (options & webglue.MeshBuilder.Options.COLOR) !== 0;
-    this.hasNormal = (options & webglue.MeshBuilder.Options.NORMALS) !== 0;
-    this.hasTexCoords = (options & webglue.MeshBuilder.Options.TEXTURE) !== 0;
+  this.options = options;
+  this.hasColor = (options & webglue.MeshBuilder.Options.COLOR) !== 0;
+  this.hasNormal = (options & webglue.MeshBuilder.Options.NORMALS) !== 0;
+  this.hasTexCoords = (options & webglue.MeshBuilder.Options.TEXTURE) !== 0;
 };
 
 
@@ -277,16 +305,11 @@ webglue.MeshBuilder.FLOATS_PER_EDGE = 9;
 webglue.MeshBuilder.BYTE_STRIDE = webglue.MeshBuilder.FLOATS_PER_EDGE * Float32Array.BYTES_PER_ELEMENT;
 
 webglue.MeshBuilder.Options = {
-    COLOR: 1,
-    NORMALS: 2,
-    TEXTURE: 4
+  COLOR: 1,
+  NORMALS: 2,
+  TEXTURE: 4
 };
 
-webglue.MeshBuilder.Mode = {
-    TRIANGLES: WebGLRenderingContext.TRIANGLES,
-    TRIANGLE_FAN: WebGLRenderingContext.TRIANGLE_FAN,
-    TRIANGLE_STRIP: WebGLRenderingContext.TRIANGLE_STRIP
-};
 
 webglue.MeshBuilder.COLOR_OFFSET = 6;
 webglue.MeshBuilder.TEX_COORD_OFFSET = 7;
@@ -299,20 +322,20 @@ webglue.MeshBuilder.NORMAL_OFFSET = 3;
  * @param {number} b Blue value (0..1)
  */
 webglue.MeshBuilder.prototype.color3f = function(r, g, b) {
-    this.color = (Math.round(r * 255) ) | 
-                 (Math.round(g * 255) << 8) |
-                 (Math.round(b * 255) << 16) | (255 << 24);
+  this.color = (Math.round(r * 255) ) | 
+               (Math.round(g * 255) << 8) |
+               (Math.round(b * 255) << 16) | (255 << 24);
 };
 
 webglue.MeshBuilder.prototype.texCoord2f = function(s, t) {
-    this.texCoordS = s;
-    this.texCoordT = t;
+  this.texCoordS = s;
+  this.texCoordT = t;
 };
 
 webglue.MeshBuilder.prototype.normal3f = function(x, y, z) {
-    this.normalX = x;
-    this.normalY = y;
-    this.normalZ = z;
+  this.normalX = x;
+  this.normalY = y;
+  this.normalZ = z;
 };
 
 /**
@@ -320,12 +343,12 @@ webglue.MeshBuilder.prototype.normal3f = function(x, y, z) {
  * @param {number} options Bit-combination of the desired options.
  */
 webglue.MeshBuilder.prototype.begin = function(mode) {
-    this.mode = mode;
+  this.mode = mode;
 
-    this.floatBufferPos = 0;
-    this.modeStartEdge = 0;
-    this.edgeCount = this.indexCount = 0;
-    this.tx = this.ty = this.tz = 0;
+  this.floatBufferPos = 0;
+  this.modeStartEdge = 0;
+  this.edgeCount = this.indexCount = 0;
+  this.tx = this.ty = this.tz = 0;
 };
 
 /**
@@ -334,8 +357,8 @@ webglue.MeshBuilder.prototype.begin = function(mode) {
  * @param {number} mode The new mode.
  */
 webglue.MeshBuilder.prototype.setMode = function(mode) {
-    this.mode = mode;
-    this.modeStartEdge = this.edgeCount;
+  this.mode = mode;
+  this.modeStartEdge = this.edgeCount;
 };
 
 /**
@@ -347,70 +370,70 @@ webglue.MeshBuilder.prototype.setMode = function(mode) {
  * @param {number} z
  */
 webglue.MeshBuilder.prototype.vertex3f = function(x, y, z) {
-    var floatBufferPos = this.floatBufferPos;
-    var floatBuffer = this.floatBuffer;
-    floatBuffer[floatBufferPos + 0] = x + this.tx;
-    floatBuffer[floatBufferPos + 1] = y + this.ty;
-    floatBuffer[floatBufferPos + 2] = z + this.tz;
-    if (this.hasColor) {
-      this.intBuffer[floatBufferPos + webglue.MeshBuilder.COLOR_OFFSET] = this.color;
-    } 
-    if (this.hasNormal) {
-      floatBuffer[floatBufferPos + webglue.MeshBuilder.NORMAL_OFFSET + 0] = this.normalX;
-      floatBuffer[floatBufferPos + webglue.MeshBuilder.NORMAL_OFFSET + 1] = this.normalY;
-      floatBuffer[floatBufferPos + webglue.MeshBuilder.NORMAL_OFFSET + 2] = this.normalZ;
-    } 
-    if (this.hasTexCoords) {
-      floatBuffer[floatBufferPos + webglue.MeshBuilder.TEX_COORD_OFFSET + 0] = this.texCoordS;
-      floatBuffer[floatBufferPos + webglue.MeshBuilder.TEX_COORD_OFFSET + 1] = this.texCoordT;
-    }
-    this.floatBufferPos += webglue.MeshBuilder.FLOATS_PER_EDGE;
-    this.edgeCount++;
+  var floatBufferPos = this.floatBufferPos;
+  var floatBuffer = this.floatBuffer;
+  floatBuffer[floatBufferPos + 0] = x + this.tx;
+  floatBuffer[floatBufferPos + 1] = y + this.ty;
+  floatBuffer[floatBufferPos + 2] = z + this.tz;
+  if (this.hasColor) {
+    this.intBuffer[floatBufferPos + webglue.MeshBuilder.COLOR_OFFSET] = this.color;
+  } 
+  if (this.hasNormal) {
+    floatBuffer[floatBufferPos + webglue.MeshBuilder.NORMAL_OFFSET + 0] = this.normalX;
+    floatBuffer[floatBufferPos + webglue.MeshBuilder.NORMAL_OFFSET + 1] = this.normalY;
+    floatBuffer[floatBufferPos + webglue.MeshBuilder.NORMAL_OFFSET + 2] = this.normalZ;
+  } 
+  if (this.hasTexCoords) {
+    floatBuffer[floatBufferPos + webglue.MeshBuilder.TEX_COORD_OFFSET + 0] = this.texCoordS;
+    floatBuffer[floatBufferPos + webglue.MeshBuilder.TEX_COORD_OFFSET + 1] = this.texCoordT;
+  }
+  this.floatBufferPos += webglue.MeshBuilder.FLOATS_PER_EDGE;
+  this.edgeCount++;
     
-    var edgeCount = this.edgeCount;
-    var indexBuffer = this.indexBuffer;
-    var indexCount = this.indexCount;
+  var edgeCount = this.edgeCount;
+  var indexBuffer = this.indexBuffer;
+  var indexCount = this.indexCount;
     
-    switch(this.mode) {
-    case webglue.MeshBuilder.Mode.TRIANGLES:
-    case webglue.MeshBuilder.Mode.LINES:
-      indexBuffer[this.indexCount++] = edgeCount - 1;
-      break;
-    case webglue.MeshBuilder.Mode.QUADS:
-      if (((this.edgeCount - this.modeStartEdge) & 3) === 0) {
-        indexBuffer[indexCount + 0] = edgeCount - 4;
-        indexBuffer[indexCount + 1] = edgeCount - 3;
-        indexBuffer[indexCount + 2] = edgeCount - 2;
+  switch(this.mode) {
+  case webglue.MeshBuilder.Mode.TRIANGLES:
+  case webglue.MeshBuilder.Mode.LINES:
+    indexBuffer[this.indexCount++] = edgeCount - 1;
+    break;
+  case webglue.MeshBuilder.Mode.QUADS:
+    if (((this.edgeCount - this.modeStartEdge) & 3) === 0) {
+      indexBuffer[indexCount + 0] = edgeCount - 4;
+      indexBuffer[indexCount + 1] = edgeCount - 3;
+      indexBuffer[indexCount + 2] = edgeCount - 2;
         
-        indexBuffer[indexCount + 3] = edgeCount - 4;
-        indexBuffer[indexCount + 4] = edgeCount - 2;
-        indexBuffer[indexCount + 5] = edgeCount - 1;
-        this.indexCount += 6;
-      }
-      break;
-    case webglue.MeshBuilder.Mode.TRIANGLE_FAN:
-      if ((this.edgeCount - this.modeStartEdge > 3)) {
-        indexBuffer[indexCount + 0] = this.modeStartEdge;
-        indexBuffer[indexCount + 1] = edgeCount - 2;
-        indexBuffer[indexCount + 2] = edgeCount - 1;
-        this.indexCount += 3;
-      } else {
-        indexBuffer[this.indexCount++] = edgeCount - 1;
-      }
-      break;
-    case webglue.MeshBuilder.Mode.TRIANGLE_STRIP:
-      if (edgeCount - this.modeStartEdge > 3) {
-        indexBuffer[indexCount + 0] = edgeCount - 3;
-        indexBuffer[indexCount + 2] = edgeCount - 2;
-        indexBuffer[indexCount + 1] = edgeCount - 1;
-        this.indexCount += 3;
-      } else {
-        indexBuffer[this.indexCount++] = edgeCount - 1;
-      }
-      break;
-    default:
-      throw "Unrecognized mode: " + this.mode;
+      indexBuffer[indexCount + 3] = edgeCount - 4;
+      indexBuffer[indexCount + 4] = edgeCount - 2;
+      indexBuffer[indexCount + 5] = edgeCount - 1;
+      this.indexCount += 6;
     }
+    break;
+  case webglue.MeshBuilder.Mode.TRIANGLE_FAN:
+    if ((this.edgeCount - this.modeStartEdge > 3)) {
+      indexBuffer[indexCount + 0] = this.modeStartEdge;
+      indexBuffer[indexCount + 1] = edgeCount - 2;
+      indexBuffer[indexCount + 2] = edgeCount - 1;
+      this.indexCount += 3;
+    } else {
+      indexBuffer[this.indexCount++] = edgeCount - 1;
+    }
+    break;
+  case webglue.MeshBuilder.Mode.TRIANGLE_STRIP:
+    if (edgeCount - this.modeStartEdge > 3) {
+      indexBuffer[indexCount + 0] = edgeCount - 3;
+      indexBuffer[indexCount + 2] = edgeCount - 2;
+      indexBuffer[indexCount + 1] = edgeCount - 1;
+      this.indexCount += 3;
+    } else {
+      indexBuffer[this.indexCount++] = edgeCount - 1;
+    }
+    break;
+  default:
+    throw "Unrecognized mode: " + this.mode;
+  }
 };
 
 /*
@@ -452,34 +475,34 @@ webglue.MeshBuilder.prototype.vertex3f = function(x, y, z) {
 */
 
 webglue.MeshBuilder.prototype.translate = function(tx, ty, tz) {
-    this.tx = tx;
-    this.ty = ty;
-    this.tz = tz;
+  this.tx = tx;
+  this.ty = ty;
+  this.tz = tz;
 };
 
 webglue.MeshBuilder.prototype.end = function() {
-    var context = this.context;
-    var gl = context.gl;
+  var context = this.context;
+  var gl = context.gl;
     
-    //debugger;
-    context.prepare();
+  //debugger;
+  context.prepare();
     
-    window.console.log("mb", this);
+  window.console.log("mb", this);
     
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.glBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, this.floatBuffer, gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.glBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, this.floatBuffer, gl.STATIC_DRAW);
     
-    gl.enableVertexAttribArray(context.positionLocation);
-    gl.vertexAttribPointer(context.positionLocation, 3, gl.FLOAT, false, webglue.MeshBuilder.BYTE_STRIDE, 0);
+  gl.enableVertexAttribArray(context.positionLocation);
+  gl.vertexAttribPointer(context.positionLocation, 3, gl.FLOAT, false, webglue.MeshBuilder.BYTE_STRIDE, 0);
     
-    if (this.hasColor) {
-      gl.enableVertexAttribArray(context.colorLocation);
-      gl.vertexAttribPointer(context.colorLocation, 4, gl.UNSIGNED_BYTE, false, webglue.MeshBuilder.BYTE_STRIDE, webglue.MeshBuilder.COLOR_OFFSET * 4);
-    } else {
-      gl.disableVertexAttribArray(context.colorLocation);
-    }
+  if (this.hasColor) {
+    gl.enableVertexAttribArray(context.colorLocation);
+    gl.vertexAttribPointer(context.colorLocation, 4, gl.UNSIGNED_BYTE, false, webglue.MeshBuilder.BYTE_STRIDE, webglue.MeshBuilder.COLOR_OFFSET * 4);
+  } else {
+    gl.disableVertexAttribArray(context.colorLocation);
+  }
     
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 };
     
 /*

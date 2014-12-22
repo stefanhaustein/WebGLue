@@ -3,39 +3,37 @@
     <title></title>
     <script type="text/javascript" src="src/webglue.js"></script>
 </head>
-<body>
-<canvas id="canvas" width="640" height="480"></canvas>    
+<body style="height:100%;padding:0;border:0;margin:0">
+<table style="height:100%;width:100%">
+  <tr>
+    <td style="width:320px;vertical-align:top">
+      <select onchange="load(this.value)">
+        <option>lesson01.js</option>
+        <option>lesson02.js</option>
+      </select> 
+      <p></p>
+      <canvas id="canvas" width="320" height="240"></canvas>
+    </td>
+    <td>
+      <iframe id="iframe" style="width:100%;height:100%"></iframe>
+    </td>
+  </tr>
+</table>
+<p></p>
 <script type="text/javascript">
-  var canvas = document.getElementById('canvas');
-  var gl = canvas.getContext('webgl');
-
-  gl.clearColor(0.5, 0.5, 0.5, 1.0); 
-  gl.clearDepth(1.0);          
-  gl.enable(gl.DEPTH_TEST);
-  gl.depthFunc(gl.LEQUAL);
-  gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  var webglue = window.webglue;
-  var ctx = new webglue.Context(gl);
-  
-  ctx.matrixMode(webglue.PROJECTION);                        // Select The Projection Matrix
-  ctx.loadIdentity();                           // Reset The Projection Matrix
- 
-  // Calculate The Aspect Ratio Of The Window
-  ctx.perspective(45.0, canvas.width / canvas.height, 0.1, 100);
- 
-  ctx.matrixMode(webglue.MODELVIEW);                     // Select The Modelview Matrix
-  ctx.loadIdentity();                           // Reset The Modelview Matrix
-  
-  
-  var mb = new webglue.MeshBuilder(ctx, webglue.MeshBuilder.Options.COLOR, 3);
-  mb.begin(webglue.MeshBuilder.TRIANGLES);  // Drawing Using Triangles
-  mb.color3f(1, 0, 0);
-  mb.vertex3f( 0.0,  1.0, -10.0);                 // Top
-  mb.vertex3f(-1.0, -1.0, -10.0);                 // Bottom Left
-  mb.vertex3f( 1.0, -1.0, -10.0);                 // Bottom Right
-  mb.end();     
+  var script = null;
+  function load(name) {
+    if (script != null) {
+      document.body.removeChild(script);
+    }
+    script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = name;
+    script.id = "loaded";
+    document.body.appendChild(script);
+    document.getElementById("iframe").src = name;
+  }
+  load("lesson01.js");
 </script>
 </body>
 </html>
