@@ -1,5 +1,5 @@
 var canvas = document.getElementById('canvas');
-var gl = canvas.getContext('webgl', {premultipliedAlpha: false});
+var gl = canvas.getContext('webgl');
 var webglue = window.webglue;
 var ctx = new webglue.Context(gl);
 
