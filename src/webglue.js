@@ -56,7 +56,7 @@ webglue.IDENTITY_MATRIX = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
  */
 webglue.length = function (x, y, z) {
   return Math.sqrt(x * x + y * y + z * z);
-}
+};
 
 webglue.multiplyMM = function (ab, abOfs, a, aOfs, b, bOfs) {
   var a0 = a[aOfs + 0], a1 = a[aOfs + 1], a2 = a[aOfs + 2], a3 = a[aOfs + 3];
@@ -214,6 +214,10 @@ webglue.Context = function (gl) {
   
   this.positionLocation = gl.getAttribLocation(program, "a_position");
   this.colorLocation = gl.getAttribLocation(program, "a_color");
+  this.texCoordLocation0 = gl.getAttribLocation(program, "a_texcoord0");
+  this.normalLocation = gl.getAttribLocation(program, "a_normal");
+  
+  this.enableTextureLocation = gl.getUniformLocation(program, "enable_tex");
     
   this.mvpLocation = gl.getUniformLocation(program, "mvp_matrix");
   this.modelViewLocation = gl.getUniformLocation(program, "modelview_matrix");
@@ -223,6 +227,7 @@ webglue.Context = function (gl) {
   this.modelViewMatrixStack_ = [new Array(16)];
   this.texture0MatrixStack_ = [new Array(16)];
   this.texture1MatrixStack_ = [new Array(16)];
+  this.enableTexBuffer_ = new Int32Array(2);
   this.activeTexture_ = 0;
   this.matrixMode_ = webglue.MODELVIEW;
   this.currentMatrixFlag_ = 1;
@@ -269,6 +274,18 @@ webglue.Context.prototype.multMatrix = function(matrix) {
   this.matrixDirty |= this.currentMatrixFlag_;
 };
 
+webglue.Context.prototype.enable = function(what) {
+  if (what == webglue.TEXTURE_2D) {
+    this.enableTexBuffer_[this.activeTexture_] = 1;
+  } 
+}
+
+webglue.Context.prototype.disable = function(what) {
+  if (what == webglue.TEXTURE_2D) {
+    this.enableTexBuffer_[this.activeTexture_] = 0;
+  } 
+}
+
 webglue.Context.prototype.frustum = function(left, right, bottom, top, zNear, zFar) {
   var matrix = [
       2 * zNear / (right - left), 0, 0, 0,
@@ -298,6 +315,8 @@ webglue.Context.prototype.prepare = function() {
       this.gl.uniformMatrix4fv(this.modelViewLocation, false, webglue.last(this.modelViewMatrixStack_));
     }
   }
+
+  this.gl.uniform1iv(this.enableTextureLocation, this.enableTexBuffer_);
     
   //this.gl.uniformMatrix4fv(this.mvpLocation, false, [1,0,0,0,  0,1,0,0, 0,0,1,0, 0,0,0,1]);
   // this.gl.uniformMatrix4fv(this.modelViewLocation, false, [1,0,0,0,  0,1,0,0, 0,0,1,0, 0,0,0,1]);
@@ -351,13 +370,25 @@ webglue.Context.prototype.translatef = function(x, y, z) {
           
 /**
  * @constructor
+ * @param {WebGLContext} context
+ * @param {=number} opt_options
+ * @param {=number} opt_maxEdges
  */
-webglue.MeshBuilder = function (context, options, maxEdges) {
+webglue.MeshBuilder = function (context, opt_options, opt_maxEdges) {
   var gl = context.gl;
+  var options = opt_options || 0;
+  var maxEdges = opt_maxEdges || 1024;
+
   this.context = context;
+  this.options = options;
+  this.hasColor = (options & webglue.MeshBuilder.Options.COLOR) !== 0;
+  this.hasNormal = (options & webglue.MeshBuilder.Options.NORMALS) !== 0;
+  this.hasTexCoords = (options & webglue.MeshBuilder.Options.TEXTURE) !== 0;
+
   this.glArrayBuffer = gl.createBuffer();
   this.glIndexBuffer = gl.createBuffer();
-    
+  this.glTexture = this.hasTexCoords ? gl.createTexture() : null;
+
   this.maxEdges = maxEdges;
   var byteBuffer = new ArrayBuffer(maxEdges * 2 * 3);
   this.indexBuffer = new Uint16Array(byteBuffer);
@@ -365,24 +396,19 @@ webglue.MeshBuilder = function (context, options, maxEdges) {
   byteBuffer = new ArrayBuffer(maxEdges * webglue.MeshBuilder.BYTE_STRIDE);
   this.floatBuffer = new Float32Array(byteBuffer);
   this.intBuffer = new Uint32Array(byteBuffer);
+
   this.mode = webglue.TRIANGLES;
-    
+
   this.color = 0;
   this.texCoordS = this.texCoordT = 0;
   this.normalX = this.normalY = this.normalZ = 0;
-  this.hasColor = this.hasNormal = this.hasTexCoords = false;
-    
+
   this.floatBufferPos = 0;
   this.modeStartEdge = 0;
   this.edgeCount = this.indexCount = 0;
   this.tx = this.ty = this.tz = 0;
     
   this.committedIndexCount = -1;
-
-  this.options = options;
-  this.hasColor = (options & webglue.MeshBuilder.Options.COLOR) !== 0;
-  this.hasNormal = (options & webglue.MeshBuilder.Options.NORMALS) !== 0;
-  this.hasTexCoords = (options & webglue.MeshBuilder.Options.TEXTURE) !== 0;
 };
 
 
@@ -421,6 +447,27 @@ webglue.MeshBuilder.prototype.normal3f = function(x, y, z) {
   this.normalX = x;
   this.normalY = y;
   this.normalZ = z;
+};
+
+webglue.MeshBuilder.prototype.loadTexture = function(name) {
+  var image = new Image();
+  var self = this;
+  window.console.log("loadTexture: " + name);
+  image.onload = function() {
+    window.console.log("loaded: " + image);
+    var gl = self.context.gl;
+    gl.bindTexture(gl.TEXTURE_2D, self.glTexture);
+    
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+ 
+    //gl.texImage2D(gl.TEXTURE_2D, 0, image, true);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+  };
+  image.src = name;
 };
 
 /**
@@ -569,9 +616,7 @@ webglue.MeshBuilder.prototype.draw = function() {
     
   //debugger;
   context.prepare();
-    
- // window.console.log("mb", this);
-    
+
   gl.bindBuffer(gl.ARRAY_BUFFER, this.glArrayBuffer);
 
   gl.enableVertexAttribArray(context.positionLocation);
@@ -581,7 +626,18 @@ webglue.MeshBuilder.prototype.draw = function() {
     gl.enableVertexAttribArray(context.colorLocation);
     gl.vertexAttribPointer(context.colorLocation, 4, gl.UNSIGNED_BYTE, true, webglue.MeshBuilder.BYTE_STRIDE, webglue.MeshBuilder.COLOR_OFFSET * 4);
   } else {
+    gl.vertexAttrib4f(context.colorLocation, 1,1,1,1);
     gl.disableVertexAttribArray(context.colorLocation);
+  }
+  
+  if (this.hasTexCoords) {
+    context.enable(webglue.TEXTURE_2D);
+    gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
+    gl.enableVertexAttribArray(context.texCoordLocation0);
+    gl.vertexAttribPointer(context.texCoordLocation0, 2, gl.FLOAT, false, webglue.MeshBuilder.BYTE_STRIDE, webglue.MeshBuilder.TEX_COORD_OFFSET * 4);
+  } else {
+    gl.disableVertexAttribArray(context.texCoordLocation0);
+    context.disable(webglue.TEXTURE_2D);
   }
     
   //gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -589,6 +645,8 @@ webglue.MeshBuilder.prototype.draw = function() {
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.glIndexBuffer);
   
   if (this.indexCount != this.committedIndexCount) {
+    window.console.log("mb", this);
+
     gl.bufferData(gl.ARRAY_BUFFER, this.floatBuffer, gl.STATIC_DRAW);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer, gl.STATIC_DRAW);
     this.committedIndexCount = this.indexCount;
@@ -665,7 +723,7 @@ webglue.VERTEX_SHADER_SOURCE =
     "#ifdef GL_ES\n" + 
     "  precision mediump float;\n" +
     "#endif\n" +
-/*
+
     "#define NUM_TEXTURES 2\n" +
   
     "struct light {" +
@@ -687,9 +745,9 @@ webglue.VERTEX_SHADER_SOURCE =
     "  vec4 emissive_color;" +
     "  float specular_exponent;" +
     "};" +
-      */
+
     "uniform mat4 mvp_matrix;" +
-    "uniform mat4 modelview_matrix;" +  /*
+    "uniform mat4 modelview_matrix;" +  
     "uniform mat3 inv_modelview_matrix;" +
     "uniform mat4 tex_matrix[NUM_TEXTURES];" +
     "uniform bool enable_tex[NUM_TEXTURES];" + 
@@ -718,7 +776,7 @@ webglue.VERTEX_SHADER_SOURCE =
     "uniform bool enable_ucp;" +
       
     // Vertex attributes
-*/
+    
     "attribute vec4 a_position;" +
     "attribute vec4 a_texcoord0;" +
     "attribute vec4 a_texcoord1;" +
@@ -727,7 +785,7 @@ webglue.VERTEX_SHADER_SOURCE =
 
     // Varying variables
       
-    "varying vec4 v_front_color;" + /*
+    "varying vec4 v_front_color;" + 
     "varying vec4 v_texcoord[NUM_TEXTURES];" +
     "varying vec4 v_back_color;" + 
     "varying float v_fog_factor;" +
@@ -787,7 +845,7 @@ webglue.VERTEX_SHADER_SOURCE =
     "  }" +
     "  return computed_color;" +
     "}" +
-
+*/
     "float compute_fog() {" + 
     "  float f;" +
     "  float distance;" + 
@@ -802,7 +860,7 @@ webglue.VERTEX_SHADER_SOURCE =
     "  f = clamp(f, 0.0, 1.0);" +
     "  return f;" +
     "}" +
-      
+/*      
     "vec4 do_lighting() {" +
     "  vec4 vtx_color;" +
     "  int i, j;" +
@@ -823,16 +881,15 @@ webglue.VERTEX_SHADER_SOURCE =
     "}" + 
 */
     "void main() {" +
-   /* "  if (enable_fog) {" + // TODO(haustein) xform_eye_p
+    "  if (enable_fog) {" + // TODO(haustein) xform_eye_p
     "    p_eye = modelview_matrix * a_position;" +
     "  }" +
-    */
+
     "  gl_Position = mvp_matrix * a_position;" +
     "  v_front_color = a_color;" + 
-/*    "  v_texcoord[0] = tex_matrix[0] * a_texcoord0;" +
-    "  v_texcoord[1] = tex_matrix[1] * a_texcoord1;" +
+    "  v_texcoord[0] = a_texcoord0;" + // tex_matrix[0] * a_texcoord0;" +
+    "  v_texcoord[1] = a_texcoord1;" +// tex_matrix[1] * a_texcoord1;" +
     "  v_fog_factor = enable_fog ? compute_fog() : 1.0;" +
-    */
     "}\n";
 
 
@@ -840,26 +897,25 @@ webglue.FRAGMENT_SHADER_SOURCE =
     "#ifdef GL_ES\n" + 
     "  precision mediump float;\n" +
     "#endif\n" +
-      /*
+  
     "#define NUM_TEXTURES 2\n" +
       
     "uniform bool enable_tex[NUM_TEXTURES];" + 
-
       
     "" + // Keep this ---------------------
     "uniform sampler2D sampler0;\n" +
     "uniform sampler2D sampler1;\n" +
     "uniform float alphaMin;\n" +
     "uniform vec4 fog_color;" +
-        */  
+ 
     "varying vec4 v_front_color;\n" +
- /*   "varying vec4 v_texcoord[NUM_TEXTURES];\n" +
+    "varying vec4 v_texcoord[NUM_TEXTURES];\n" +
     "varying float v_fog_factor;\n" +
           
     "vec4 finalColor;\n" +        
-         */ 
+
     "void main() {\n" +
- /*   "  finalColor = v_front_color;\n" +
+    "  finalColor = v_front_color;\n" +
     // Textures
     "  if (enable_tex[0]) { \n" +
     "    vec4 texel0 = texture2D(sampler0, vec2(v_texcoord[0].x, v_texcoord[0].y)); \n" +
@@ -871,7 +927,7 @@ webglue.FRAGMENT_SHADER_SOURCE =
     "      finalColor = finalColor * texel1;" +
     "  } \n" +
 
-          // FOG
+    // FOG
     "  finalColor = vec4(v_fog_factor * finalColor.r + fog_color.r * (1.0 - v_fog_factor)," +
     "                    v_fog_factor * finalColor.g + fog_color.g * (1.0 - v_fog_factor)," +
     "                    v_fog_factor * finalColor.b + fog_color.b * (1.0 - v_fog_factor)," +
@@ -881,7 +937,5 @@ webglue.FRAGMENT_SHADER_SOURCE =
     "    discard;\n" +
     "  }\n" +
     "  gl_FragColor = finalColor;\n" +
-    */
-    "  gl_FragColor = v_front_color;" +
     "}\n";
           

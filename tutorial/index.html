@@ -7,19 +7,25 @@
 <table style="height:100%;width:100%">
   <tr>
     <td style="width:320px;vertical-align:top">
+      <canvas id="canvas" width="320" height="240"></canvas>
+      <p>
+      <center>
       <select onchange="load(this.value)">
+        <optgroup label="Lessons 01-05">
         <option>lesson01.js</option>
         <option>lesson02.js</option>
         <option>lesson03.js</option>
         <option>lesson04.js</option>
         <option>lesson05.js</option>
+        </optgroup>
+        <optgroup label="Lessons 06-10">
         <option>lesson06.js</option>
         <option>lesson07.js</option>
         <option>lesson08.js</option>
+        </optgroup>
       </select> 
       <button onclick="run()">Restart</button>
-      <p></p>
-      <canvas id="canvas" width="320" height="240"></canvas>
+      </center>
     </td>
     <td>
       <textarea id="textarea" style="width:100%;height:100%;font-family:monospace;"></textarea>
