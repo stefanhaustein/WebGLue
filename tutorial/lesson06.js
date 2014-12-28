@@ -16,35 +16,35 @@ function initGl() {
   
   quad.loadTexture("nehe.png");
   
-  quad.texCoord2f(0.0, 0.0); quad.vertex3f( 1.0, 1.0,-1.0);          // Top Right Of The Quad (Top)
-  quad.texCoord2f(1.0, 0.0); quad.vertex3f(-1.0, 1.0,-1.0);          // Top Left Of The Quad (Top)
-  quad.texCoord2f(1.0, 1.0); quad.vertex3f(-1.0, 1.0, 1.0);          // Bottom Left Of The Quad (Top)
-  quad.texCoord2f(0.0, 1.0); quad.vertex3f( 1.0, 1.0, 1.0);          // Bottom Right Of The Quad (Top)
+  quad.texCoord2f(0.0, 0.0); quad.vertex3f( 1.0, 1.0,-1.0);  // Top Right Of The Quad (Top)
+  quad.texCoord2f(1.0, 0.0); quad.vertex3f(-1.0, 1.0,-1.0);  // Top Left Of The Quad (Top)
+  quad.texCoord2f(1.0, 1.0); quad.vertex3f(-1.0, 1.0, 1.0);  // Bottom Left Of The Quad (Top)
+  quad.texCoord2f(0.0, 1.0); quad.vertex3f( 1.0, 1.0, 1.0);  // Bottom Right Of The Quad (Top)
 
-  quad.texCoord2f(1.0, 0.0); quad.vertex3f( 1.0,-1.0, 1.0);          // Top Right Of The Quad (Bottom)
-  quad.texCoord2f(1.0, 1.0); quad.vertex3f(-1.0,-1.0, 1.0);          // Top Left Of The Quad (Bottom)
-  quad.texCoord2f(0.0, 1.0); quad.vertex3f(-1.0,-1.0,-1.0);          // Bottom Left Of The Quad (Bottom)
-  quad.texCoord2f(0.0, 0.0); quad.vertex3f( 1.0,-1.0,-1.0);          // Bottom Right Of The Quad (Bottom)
+  quad.texCoord2f(1.0, 0.0); quad.vertex3f( 1.0,-1.0, 1.0);  // Top Right Of The Quad (Bottom)
+  quad.texCoord2f(1.0, 1.0); quad.vertex3f(-1.0,-1.0, 1.0);  // Top Left Of The Quad (Bottom)
+  quad.texCoord2f(0.0, 1.0); quad.vertex3f(-1.0,-1.0,-1.0);  // Bottom Left Of The Quad (Bottom)
+  quad.texCoord2f(0.0, 0.0); quad.vertex3f( 1.0,-1.0,-1.0);  // Bottom Right Of The Quad (Bottom)
 
-  quad.texCoord2f(0.0, 1.0); quad.vertex3f( 1.0, 1.0, 1.0);          // Top Right Of The Quad (Front)
-  quad.texCoord2f(0.0, 0.0); quad.vertex3f(-1.0, 1.0, 1.0);          // Top Left Of The Quad (Front)
-  quad.texCoord2f(1.0, 0.0); quad.vertex3f(-1.0,-1.0, 1.0);          // Bottom Left Of The Quad (Front)
-  quad.texCoord2f(1.0, 1.0); quad.vertex3f( 1.0,-1.0, 1.0);          // Bottom Right Of The Quad (Front)
+  quad.texCoord2f(0.0, 1.0); quad.vertex3f( 1.0, 1.0, 1.0);  // Top Right Of The Quad (Front)
+  quad.texCoord2f(0.0, 0.0); quad.vertex3f(-1.0, 1.0, 1.0);  // Top Left Of The Quad (Front)
+  quad.texCoord2f(1.0, 0.0); quad.vertex3f(-1.0,-1.0, 1.0);  // Bottom Left Of The Quad (Front)
+  quad.texCoord2f(1.0, 1.0); quad.vertex3f( 1.0,-1.0, 1.0);  // Bottom Right Of The Quad (Front)
 
-  quad.texCoord2f(1.0, 1.0); quad.vertex3f( 1.0,-1.0,-1.0);          // Bottom Left Of The Quad (Back)
-  quad.texCoord2f(0.0, 1.0); quad.vertex3f(-1.0,-1.0,-1.0);          // Bottom Right Of The Quad (Back)
-  quad.texCoord2f(0.0, 0.0); quad.vertex3f(-1.0, 1.0,-1.0);          // Top Right Of The Quad (Back)
-  quad.texCoord2f(1.0, 0.0); quad.vertex3f( 1.0, 1.0,-1.0);          // Top Left Of The Quad (Back)
+  quad.texCoord2f(1.0, 1.0); quad.vertex3f( 1.0,-1.0,-1.0);  // Bottom Left Of The Quad (Back)
+  quad.texCoord2f(0.0, 1.0); quad.vertex3f(-1.0,-1.0,-1.0);  // Bottom Right Of The Quad (Back)
+  quad.texCoord2f(0.0, 0.0); quad.vertex3f(-1.0, 1.0,-1.0);  // Top Right Of The Quad (Back)
+  quad.texCoord2f(1.0, 0.0); quad.vertex3f( 1.0, 1.0,-1.0);  // Top Left Of The Quad (Back)
 
-  quad.texCoord2f(1.0, 0.0); quad.vertex3f(-1.0, 1.0, 1.0);          // Top Right Of The Quad (Left)
-  quad.texCoord2f(1.0, 1.0); quad.vertex3f(-1.0, 1.0,-1.0);          // Top Left Of The Quad (Left)
-  quad.texCoord2f(0.0, 1.0); quad.vertex3f(-1.0,-1.0,-1.0);          // Bottom Left Of The Quad (Left)
-  quad.texCoord2f(0.0, 0.0); quad.vertex3f(-1.0,-1.0, 1.0);          // Bottom Right Of The Quad (Left)
+  quad.texCoord2f(1.0, 0.0); quad.vertex3f(-1.0, 1.0, 1.0);  // Top Right Of The Quad (Left)
+  quad.texCoord2f(1.0, 1.0); quad.vertex3f(-1.0, 1.0,-1.0);  // Top Left Of The Quad (Left)
+  quad.texCoord2f(0.0, 1.0); quad.vertex3f(-1.0,-1.0,-1.0);  // Bottom Left Of The Quad (Left)
+  quad.texCoord2f(0.0, 0.0); quad.vertex3f(-1.0,-1.0, 1.0);  // Bottom Right Of The Quad (Left)
 
-  quad.texCoord2f(0.0, 0.0); quad.vertex3f( 1.0, 1.0,-1.0);          // Top Right Of The Quad (Right)
-  quad.texCoord2f(1.0, 0.0); quad.vertex3f( 1.0, 1.0, 1.0);          // Top Left Of The Quad (Right)
-  quad.texCoord2f(1.0, 1.0); quad.vertex3f( 1.0,-1.0, 1.0);          // Bottom Left Of The Quad (Right)
-  quad.texCoord2f(0.0, 1.0); quad.vertex3f( 1.0,-1.0,-1.0);          // Bottom Right Of The Quad (Right)
+  quad.texCoord2f(0.0, 0.0); quad.vertex3f( 1.0, 1.0,-1.0);  // Top Right Of The Quad (Right)
+  quad.texCoord2f(1.0, 0.0); quad.vertex3f( 1.0, 1.0, 1.0);  // Top Left Of The Quad (Right)
+  quad.texCoord2f(1.0, 1.0); quad.vertex3f( 1.0,-1.0, 1.0);  // Bottom Left Of The Quad (Right)
+  quad.texCoord2f(0.0, 1.0); quad.vertex3f( 1.0,-1.0,-1.0);  // Bottom Right Of The Quad (Right)
 }
 
 

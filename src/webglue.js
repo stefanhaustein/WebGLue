@@ -1,33 +1,15 @@
-// webglue.js
 // Copyright (c) 2014 Stefan Haustein; 
-// GL11 Vertex Shader 
-// Copyright (c) 2009 Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-// software and associated documentation files (the "Software"), to deal in the Software
-// without restriction, including without limitation the rights to use, copy, modify, 
-// merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-// permit persons to whom the Software is furnished to do so, subject to the following 
-// conditions:
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
-// The above copyright notice and this permission notice shall be included in all copies
-// or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-// Book:      OpenGL(R) ES 2.0 Programming Guide
-// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
-// ISBN-10:   0321502795
-// ISBN-13:   9780321502797
-// Publisher: Addison-Wesley Professional
-// URLs:      http://safari.informit.com/9780321563835
-//            http://www.opengles-book.com
-//            http://www.opengles-book.com/downloads.html
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 var webglue = window.webglue = {};
    
@@ -57,6 +39,9 @@ webglue.IDENTITY_MATRIX = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 webglue.length = function (x, y, z) {
   return Math.sqrt(x * x + y * y + z * z);
 };
+
+webglue.tmpMatrix_ = new Float32Array(16);
+
 
 webglue.multiplyMM = function (ab, abOfs, a, aOfs, b, bOfs) {
   var a0 = a[aOfs + 0], a1 = a[aOfs + 1], a2 = a[aOfs + 2], a3 = a[aOfs + 3];
@@ -99,9 +84,8 @@ webglue.multiplyMM = function (ab, abOfs, a, aOfs, b, bOfs) {
  * @param z scale factor z
  */
 webglue.rotateM = function (rm, rmOffset, m, mOffset, a, x, y, z) {
-  var r = new Array(16);
-  webglue.setRotateM(r, 0, a, x, y, z);
-  webglue.multiplyMM(rm, rmOffset, m, mOffset, r, 0);
+  webglue.setRotateM(webglue.tmpMatrix_, 0, a, x, y, z);
+  webglue.multiplyMM(rm, rmOffset, m, mOffset, webglue.tmpMatrix_, 0);
 };
     
 /**
@@ -223,10 +207,10 @@ webglue.Context = function (gl) {
   this.modelViewLocation = gl.getUniformLocation(program, "modelview_matrix");
 
   // TODO: Change to float buffers.  
-  this.projectionMatrixStack_ = [new Array(16)];
-  this.modelViewMatrixStack_ = [new Array(16)];
-  this.texture0MatrixStack_ = [new Array(16)];
-  this.texture1MatrixStack_ = [new Array(16)];
+  this.projectionMatrixStack_ = [new Float32Array(16)];
+  this.modelViewMatrixStack_ = [new Float32Array(16)];
+  this.texture0MatrixStack_ = [new Float32Array(16)];
+  this.texture1MatrixStack_ = [new Float32Array(16)];
   this.enableTexBuffer_ = new Int32Array(2);
   this.activeTexture_ = 0;
   this.matrixMode_ = webglue.MODELVIEW;
@@ -234,8 +218,7 @@ webglue.Context = function (gl) {
   this.currentMatrixStack_ = this.modelViewMatrixStack_;
   this.matrixDirty_ = 255;
   this.currentMatrix = this.modelViewMatrixStack_[0];
-  this.mvpMatrix_ = new Array(16);
-  this.tmpMatrix_ = new Array(16);
+  this.mvpMatrix_ = new Float32Array(16);
 };
 
 webglue.Context.prototype.loadIdentity = function() {
@@ -717,7 +700,33 @@ webglue.MeshBuilder.prototype.vertex2f = function(x, y) {
     this.vertex3f(x, y, 0);
 };
 
-
+// Copyright (c) 2009 Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+// software and associated documentation files (the "Software"), to deal in the Software
+// without restriction, including without limitation the rights to use, copy, modify, 
+// merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
+// permit persons to whom the Software is furnished to do so, subject to the following 
+// conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies
+// or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// Book:      OpenGL(R) ES 2.0 Programming Guide
+// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+// ISBN-10:   0321502795
+// ISBN-13:   9780321502797
+// Publisher: Addison-Wesley Professional
+// URLs:      http://safari.informit.com/9780321563835
+//            http://www.opengles-book.com
+//            http://www.opengles-book.com/downloads.html
 
 webglue.VERTEX_SHADER_SOURCE = 
     "#ifdef GL_ES\n" + 
