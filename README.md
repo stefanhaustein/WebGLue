@@ -2,5 +2,7 @@
 
 A small library for "old-school" style gl programming with WebGL
 
-http://stefan-haustein.com/WebGLue/
+Playgound: http://stefan-haustein.com/WebGLue/
+
+You might also be interested in this project: https://github.com/evanw/lightgl.js
 
